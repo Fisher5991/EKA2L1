@@ -23,11 +23,14 @@
 
 #include <common/algorithm.h>
 #include <common/dynamicfile.h>
+#include <common/log.h>
 #include <common/path.h>
 
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+
+#include <Windows.h>
 
 namespace eka2l1::manager {
     void get_recommended_stat_for_device(const epocver ver, std::uint16_t &time_delay_us) {
@@ -44,6 +47,7 @@ namespace eka2l1::manager {
         try {
             devices_node = std::move(YAML::LoadFile(add_path(conf->storage, "devices.yml")));
         } catch (YAML::Exception exception) {
+            LOG_ERROR("Load device file failed! Win32 error code {}", GetLastError());
             return;
         }
 
